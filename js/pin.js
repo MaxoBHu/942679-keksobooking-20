@@ -1,16 +1,18 @@
 'use strict';
 (function () {
+  var pin = document.querySelector('#pin').content.querySelector('.map__pin');
+  var image = pin.querySelector('img');
+
   function createPin(data) {
-    var coords = Object.assign({}, data.location);
-    coords = window.Utils.convertAddressToCoords(coords);
-    var template = document.querySelector('#pin').content.querySelector('.map__pin');
-    var pin = template.cloneNode(true);
+    var coords = window.Utils.convertAddressToCoords(data.location);
+
     pin.style.left = coords.x + 'px';
     pin.style.top = coords.y + 'px';
-    pin.querySelector('img').alt = data.offer.title;
-    pin.querySelector('img').src = data.author.avatar;
-    pin.tabindex = '0';
-    return pin;
+
+    image.alt = data.offer.title;
+    image.src = data.author.avatar;
+
+    return pin.cloneNode(true);
   }
 
   window.createPin = createPin;

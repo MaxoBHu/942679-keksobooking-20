@@ -10,4 +10,5 @@
 
   mainMap.classList.toggle('map--faded');
   window.Utils.render(pinsContainer, pins);
+  window.card.render(orders[0]);
 })();
