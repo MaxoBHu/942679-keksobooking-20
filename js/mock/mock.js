@@ -59,18 +59,18 @@
   function generateTitle(type) {
     var REPLACE = 'object';
 
-    return window.Utils.getRandomArrValue(titles).replace(REPLACE, type);
+    return window.utils.getRandomArrValue(titles).replace(REPLACE, type);
   }
 
   function generateOrder(order, index) {
     var coords = {
-      x: window.Utils.setCoordX(window.Utils.getRandomInt(window.constants.MAP_MIN_X, window.constants.MAP_MAX_X)),
-      y: window.Utils.setCoordY(window.Utils.getRandomInt(window.constants.MAP_MIN_Y, window.constants.MAP_MAX_Y))
+      x: window.utils.setCoordX(window.utils.getRandomInt(window.constants.MAP_MIN_X, window.constants.MAP_MAX_X)),
+      y: window.utils.setCoordY(window.utils.getRandomInt(window.constants.MAP_MIN_Y, window.constants.MAP_MAX_Y))
     };
 
-    coords = window.Utils.convertCoordsToAddress(coords);
+    coords = window.utils.convertCoordsToAddress(coords);
 
-    var offerType = window.Utils.getRandomArrValue(Object.keys(bookingTypes));
+    var offerType = window.utils.getRandomArrValue(Object.keys(bookingTypes));
 
     order = {
       'author': {
@@ -79,15 +79,15 @@
       'offer': {
         'title': generateTitle(bookingTypes[offerType]),
         'address': coords.x + ', ' + coords.y,
-        'price': window.Utils.getRandomInt(price.min, price.max),
+        'price': window.utils.getRandomInt(price.min, price.max),
         'type': offerType,
-        'rooms': window.Utils.getRandomInt(rooms.min, rooms.max),
-        'guests': window.Utils.getRandomInt(guests.min, guests.max),
-        'checkin': window.Utils.getRandomArrValue(timePeriods),
-        'checkout': window.Utils.getRandomArrValue(timePeriods),
-        'features': window.Utils.getRandomArr(features, window.Utils.getRandomInt(MIN_FEATURES, features.length)),
-        'description': window.Utils.getRandomArrValue(descriptions),
-        'photos': window.Utils.getRandomArr(photos)
+        'rooms': window.utils.getRandomInt(rooms.min, rooms.max),
+        'guests': window.utils.getRandomInt(guests.min, guests.max),
+        'checkin': window.utils.getRandomArrValue(timePeriods),
+        'checkout': window.utils.getRandomArrValue(timePeriods),
+        'features': window.utils.getRandomArr(features, window.utils.getRandomInt(MIN_FEATURES, features.length)),
+        'description': window.utils.getRandomArrValue(descriptions),
+        'photos': window.utils.getRandomArr(photos)
       },
       'location': {
         'x': coords.x,
