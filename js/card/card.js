@@ -1,5 +1,5 @@
 'use strict';
-(function() {
+(function () {
   var mapContainer = document.querySelector('.map');
   var mapFilterContainer = mapContainer.querySelector('.map__filters-container');
   var templateCard = document.querySelector('#card').content.children[0];
@@ -61,13 +61,13 @@
     popupNode.querySelector('.popup__photos').appendChild(offerAdPhotos);
 
     return popupNode;
-  };
+  }
 
   function renderMapCard(cardData) {
     var mapCard = getOfferAd(cardData);
 
     mapContainer.insertBefore(mapCard, mapFilterContainer);
-  };
+  }
 
   window.card = {
     render: renderMapCard,
