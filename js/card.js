@@ -12,6 +12,41 @@
     'bungalo': 'Бунгало',
   };
 
+  var card = null;
+  var onCardRemove = null;
+
+  function onCloseMousedown(evt) {
+    if (window.utils.isMouseLeftButtonEvent(evt)) {
+      deleteCard();
+    }
+  }
+
+  function onCloseKeydown(evt) {
+    if (window.utils.isEnterEvent(evt)) {
+      deleteCard();
+    }
+  }
+
+  function deleteCard() {
+    if (card !== null) {
+      card.remove();
+      card = null;
+
+      if (typeof onCardRemove === 'function') {
+        onCardRemove();
+        onCardRemove = null;
+      }
+
+      document.removeEventListener('keydown', onEscapeKeydown);
+    }
+  }
+
+  function onEscapeKeydown(evt) {
+    if (window.utils.isEscapeEvent(evt)) {
+      deleteCard();
+    }
+  }
+
   function getAdvertFeatures(features) {
     var fragment = document.createDocumentFragment();
 
@@ -61,17 +96,30 @@
     var photos = popupNode.querySelector('.popup__photos');
     photos.innerHTML = '';
     photos.appendChild(offerAdPhotos);
+    var closeButton = popupNode.querySelector('.popup__close');
+    closeButton.addEventListener('mousedown', onCloseMousedown);
+    closeButton.addEventListener('keydown', onCloseKeydown);
 
     return popupNode;
   }
 
   function renderMapCard(cardData) {
-    var mapCard = getOfferAd(cardData);
+    deleteCard();
 
-    mapContainer.insertBefore(mapCard, mapFilterContainer);
+    card = getOfferAd(cardData);
+
+    mapContainer.insertBefore(card, mapFilterContainer);
+
+    document.addEventListener('keydown', onEscapeKeydown);
+  }
+
+  function setOnCardRemove(onRemove) {
+    onCardRemove = onRemove;
   }
 
   window.card = {
+    remove: deleteCard,
     render: renderMapCard,
+    setOnRemove: setOnCardRemove,
   };
 })();
