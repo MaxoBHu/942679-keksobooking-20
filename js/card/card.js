@@ -12,7 +12,7 @@
     'bungalo': 'Бунгало',
   };
 
-  var getAdvertFeatures = function (features) {
+  function getAdvertFeatures(features) {
     var fragment = document.createDocumentFragment();
 
     features.forEach(function (it) {
@@ -25,9 +25,9 @@
     });
 
     return fragment;
-  };
+  }
 
-  var getAdvertPhotos = function (photos) {
+  function getAdvertPhotos(photos) {
     var fragment = document.createDocumentFragment();
 
     photos.forEach(function (it) {
@@ -39,7 +39,7 @@
     });
 
     return fragment;
-  };
+  }
 
   function getOfferAd(cardData) {
     var popupNode = templateCard.cloneNode(true);
@@ -54,11 +54,13 @@
     popupNode.querySelector('.popup__type').textContent = typeEnToRu[cardData.offer.type];
     popupNode.querySelector('.popup__text--capacity').textContent = cardData.offer.rooms + ' комнаты для ' + cardData.offer.guests + ' гостей';
     popupNode.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
-    popupNode.querySelector('.popup__features').innerHTML = '';
-    popupNode.querySelector('.popup__features').appendChild(offerAdFeatures);
+    var features = popupNode.querySelector('.popup__features');
+    features.innerHTML = '';
+    features.appendChild(offerAdFeatures);
     popupNode.querySelector('.popup__description').textContent = cardData.offer.description;
-    popupNode.querySelector('.popup__photos').innerHTML = '';
-    popupNode.querySelector('.popup__photos').appendChild(offerAdPhotos);
+    var photos = popupNode.querySelector('.popup__photos');
+    photos.innerHTML = '';
+    photos.appendChild(offerAdPhotos);
 
     return popupNode;
   }
