@@ -2,6 +2,7 @@
 
 (function () {
   var container = document.querySelector('.map');
+  window.map = {};
 
   function setDisabled() {
     window.map.disabled = true;
@@ -12,11 +13,14 @@
 
   function setEnabled() {
     window.map.disabled = false;
+    window.filter.setEnabled();
     container.classList.remove('map--faded');
     window.data.generate();
     window.pin.render(window.data.adverts);
     window.form.setDisable(false);
   }
+
+  setDisabled();
 
   window.map = {
     disabled: true,

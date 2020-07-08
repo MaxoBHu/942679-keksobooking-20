@@ -5,7 +5,7 @@
   var container = document.querySelector('.map__pins');
   var mainPin = container.querySelector('.map__pin--main');
 
-  function createPin(data, advertId) {
+  function createPin(data) {
     var coords = window.utils.convertAddressToCoords(data.location);
 
     pinTemplate.style.left = coords.x + 'px';
@@ -14,7 +14,7 @@
     image.alt = data.offer.title;
     image.src = data.author.avatar;
 
-    pinTemplate.dataset.offerId = advertId;
+    pinTemplate.dataset.offerId = data.id;
 
     return pinTemplate.cloneNode(true);
   }
@@ -22,8 +22,8 @@
   function render(adverts) {
     var fragment = document.createDocumentFragment();
 
-    adverts.forEach(function (advert, advertId) {
-      var pinNode = createPin(advert, advertId);
+    adverts.forEach(function (advert) {
+      var pinNode = createPin(advert);
 
       fragment.appendChild(pinNode);
     });
@@ -34,10 +34,26 @@
     container.addEventListener('keydown', onContainerKeydown);
   }
 
+  function remove() {
+    var pins = container.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    pins.forEach(function (item) {
+      item.remove();
+    });
+  }
+
   function showCardForPin(evt) {
     var pin = evt.target.closest('.map__pin:not(.map__pin--main)');
     if (pin !== null && !pin.classList.contains('map__pin--active')) {
-      window.card.render(window.data.adverts[pin.dataset.offerId]);
+
+      var activeAdvert = window.data.adverts.find(function (advert) {
+        if (advert.id === pin.dataset.offerId) {
+          return advert;
+        }
+        return undefined;
+      });
+
+      window.card.render(activeAdvert);
       pin.classList.add('map__pin--active');
 
       window.card.setOnRemove(function () {
@@ -59,6 +75,7 @@
   }
 
   window.pin = {
+    remove: remove,
     render: render,
   };
 })();
