@@ -16,6 +16,7 @@
       minY: 130,
       maxY: 630,
     },
+    mouse: {},
   };
 
   function setAddress() {
@@ -38,6 +39,31 @@
     window.map.setEnabled();
   }
 
+  function movePin(evt) {
+    var pinCoords = {
+      x: evt.clientX - offset.map.x - offset.mouse.x,
+      y: evt.clientY - offset.map.y - offset.mouse.y,
+    };
+
+    if (pinCoords.y + Y_GAP <= offset.map.minY) {
+      pin.style.top = offset.map.minY - Y_GAP + 'px';
+    } else if (pinCoords.y + Y_GAP >= offset.map.maxY) {
+      pin.style.top = offset.map.maxY - Y_GAP + 'px';
+    } else {
+      pin.style.top = pinCoords.y + 'px';
+    }
+
+    if (pinCoords.x + X_GAP <= offset.map.minX) {
+      pin.style.left = offset.map.minX - X_GAP + 'px';
+    } else if (pinCoords.x + X_GAP >= offset.map.maxX) {
+      pin.style.left = offset.map.maxX - X_GAP + 'px';
+    } else {
+      pin.style.left = pinCoords.x + 'px';
+    }
+
+    setAddress();
+  }
+
   function onPinMousedown(evt) {
     if (window.utils.isMouseLeftButtonEvent(evt)) {
       if (window.map.disabled) {
@@ -48,11 +74,41 @@
       offset.map.x = map.offsetLeft;
       offset.map.y = map.offsetTop;
       offset.map.maxX = map.offsetWidth;
+
+      offset.mouse.x = evt.clientX - offset.map.x - pin.offsetLeft;
+      offset.mouse.y = evt.clientY - offset.map.y - pin.offsetTop;
+
+      document.addEventListener('mousemove', onPinMousemove);
+      document.addEventListener('mouseup', onPinMouseup);
+
+      window.addEventListener('blur', onBlur);
     }
   }
 
+  function onPinMousemove(evt) {
+    movePin(evt);
+  }
+
+  function onPinMouseup(evt) {
+    movePin(evt);
+
+    document.removeEventListener('mousemove', onPinMousemove);
+    document.removeEventListener('mouseup', onPinMouseup);
+
+    window.removeEventListener('blur', onBlur);
+  }
+
+  function onBlur() {
+    document.removeEventListener('mousemove', onPinMousemove);
+    document.removeEventListener('mouseup', onPinMouseup);
+
+    window.removeEventListener('blur', onBlur);
+
+    setAddress();
+  }
+
   function onPinKeydown(evt) {
-    if (window.util.isEnterEvent(evt)) {
+    if (window.utils.isEnterEvent(evt)) {
       enableMap();
       pin.removeEventListener('keydown', onPinKeydown);
     }
@@ -67,6 +123,8 @@
 
     setAddress();
   }
+
+  setDefault();
 
   window.mainPin = {
     reset: setDefault,
