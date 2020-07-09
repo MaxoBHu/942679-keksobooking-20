@@ -15,8 +15,7 @@
     window.map.disabled = false;
     window.filter.setEnabled();
     container.classList.remove('map--faded');
-    window.data.generate();
-    window.pin.render(window.data.adverts);
+    window.data.generate(window.filter.setToAdverts);
     window.form.setDisable(false);
   }
 

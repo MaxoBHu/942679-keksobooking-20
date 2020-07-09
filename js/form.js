@@ -75,6 +75,7 @@
   }
 
   function removeEventListeners() {
+    form.removeEventListener('submit', onFormSubmit);
     form.removeEventListener('reset', onFormReset);
     roomsCount.removeEventListener('change', onRoomsCountChange);
     guestsCount.removeEventListener('change', onGuestCountChange);
@@ -84,6 +85,7 @@
   }
 
   function addEventListeners() {
+    form.addEventListener('submit', onFormSubmit);
     form.addEventListener('reset', onFormReset);
     roomsCount.addEventListener('change', onRoomsCountChange);
     guestsCount.addEventListener('change', onGuestCountChange);
@@ -110,7 +112,6 @@
       price.required = true;
       form.classList.remove('ad-form--disabled');
       addEventListeners();
-
       configureFields();
     }
   }
@@ -166,6 +167,28 @@
 
   function onCheckoutChange() {
     checkin.value = checkout.value;
+  }
+
+  function onFormSubmit(evt) {
+    evt.preventDefault();
+
+    function onLoad(response) {
+      window.map.setDisabled();
+      toggleFieldsDisable(true);
+      window.card.remove();
+      window.pin.remove();
+      window.mainPin.reset();
+      window.mainPin.setAddress();
+      window.message.showLoadSuccess(response);
+    }
+
+    var onError = function (error) {
+      window.message.showLoadError(error);
+    };
+
+    var data = new FormData(form);
+
+    window.backend.save(data, onLoad, onError);
   }
 
   function onFormReset(evt) {
