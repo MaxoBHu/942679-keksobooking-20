@@ -12,7 +12,7 @@
     lastTimeoutId = window.setTimeout(function () {
       onTimeout();
     }, DEBOUNCE_INTERVAL);
-  };
+  }
 
   window.debounce = debounce;
 })();
