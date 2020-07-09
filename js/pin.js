@@ -20,10 +20,11 @@
   }
 
   function render(adverts) {
+    remove();
     var fragment = document.createDocumentFragment();
 
     adverts.forEach(function (advert) {
-      var pinNode = createPin(advert);
+      var pinNode = createPin(window.data.adverts[advert]);
 
       fragment.appendChild(pinNode);
     });

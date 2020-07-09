@@ -3,14 +3,22 @@
 (function () {
   var adverts = [];
 
-  function generate() {
-    adverts = window.generateOrders(window.constants.ORDER_COUNT);
+  function generate(cb) {
+    function onSuccess(response) {
 
-    adverts.forEach(function (advert, index) {
-      advert.id = '' + (index + 1);
-    });
+      response.forEach(function (advert, index) {
+        advert.id = '' + (index + 1);
+      });
 
-    window.data.adverts = adverts;
+      window.data.adverts = response;
+      cb();
+    }
+
+    function onError() {
+
+    }
+
+    window.backend.load(onSuccess, onError);
   }
 
   window.data = {

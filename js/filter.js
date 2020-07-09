@@ -1,9 +1,95 @@
 'use strict';
 
 (function () {
+  var DEFAULT_FILTER_VALUE = 'any';
+  var COUNT_PINS_ON_MAP = 5;
+
   var filterForm = document.querySelector('.map__filters');
   var filters = filterForm.querySelectorAll('.map__filter');
   var featuresContainer = filterForm.querySelector('.map__features');
+
+  var housingType = filterForm.querySelector('#housing-type');
+  var housingPrice = filterForm.querySelector('#housing-price');
+  var housingRooms = filterForm.querySelector('#housing-rooms');
+  var housingGuests = filterForm.querySelector('#housing-guests');
+
+  var priceToRange = {
+    'low': {
+      from: 0,
+      to: 9999,
+    },
+    'middle': {
+      from: 10000,
+      to: 50000,
+    },
+    'high': {
+      from: 50001,
+      to: 1000000,
+    }
+  };
+
+  function filterByType(advert) {
+    return housingType.value === DEFAULT_FILTER_VALUE
+    || housingType.value === advert.offer.type;
+  }
+
+  function filterByPrice(advert) {
+    return housingPrice.value === DEFAULT_FILTER_VALUE
+    || advert.offer.price >= priceToRange[housingPrice.value].from
+    && advert.offer.price <= priceToRange[housingPrice.value].to;
+  }
+
+  function filterByRooms(advert) {
+    return housingRooms.value === DEFAULT_FILTER_VALUE
+    || Number(housingRooms.value) === advert.offer.rooms;
+  }
+
+  function filterByGuests(advert) {
+    return housingGuests.value === DEFAULT_FILTER_VALUE
+    || Number(housingGuests.value) === advert.offer.guests;
+  }
+
+  function filterByFeatures(advert, features) {
+    var advertFeatures = advert.offer.features;
+
+    return features.every(function (feature) {
+      return advertFeatures.includes(feature);
+    });
+  }
+
+  function setFiltersToAdverts() {
+    window.card.remove();
+
+    var adverts = [];
+
+    var features = Array.from(
+        featuresContainer.querySelectorAll('input:checked'))
+        .map(function (feature) {
+          return feature.value;
+        });
+
+    for (var index = 0; index < window.data.adverts.length; index++) {
+      var advert = window.data.adverts[index];
+      if (filterByType(advert)
+        && filterByPrice(advert)
+        && filterByRooms(advert)
+        && filterByGuests(advert)
+        && filterByFeatures(advert, features)
+      ) {
+        adverts.push(index);
+      }
+
+      if (adverts.length === COUNT_PINS_ON_MAP) {
+        break;
+      }
+    }
+
+    window.pin.render(adverts);
+  }
+
+  function onFilterFormChange() {
+    window.debounce(setFiltersToAdverts);
+  }
 
   function setDisabled() {
     filterForm.reset();
@@ -13,6 +99,7 @@
     });
 
     featuresContainer.disabled = true;
+    filterForm.removeEventListener('change', onFilterFormChange);
   }
 
   function setEnabled() {
@@ -21,10 +108,12 @@
     });
 
     featuresContainer.disabled = false;
+    filterForm.addEventListener('change', onFilterFormChange);
   }
 
   window.filter = {
     setDisabled: setDisabled,
     setEnabled: setEnabled,
+    setToAdverts: setFiltersToAdverts,
   };
 })();
