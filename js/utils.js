@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  
   var EventKeyCode = {
     ENTER: 'Enter',
     NUMPAD_ENTER: 'NumpadEnter',
