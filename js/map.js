@@ -2,7 +2,7 @@
 
 (function () {
   var container = document.querySelector('.map');
-  window.map = {};
+  window.map = { };
 
   function setDisabled() {
     window.map.disabled = true;
