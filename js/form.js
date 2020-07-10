@@ -102,12 +102,14 @@
     });
 
     if (disabled) {
+      window.preview.setDisabled();
       title.required = false;
       price.required = false;
       form.classList.add('ad-form--disabled');
       removeEventListeners();
       resetFields();
     } else {
+      window.preview.setEnabled();
       title.required = true;
       price.required = true;
       form.classList.remove('ad-form--disabled');
