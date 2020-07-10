@@ -2,6 +2,7 @@
 
 (function () {
   var GUEST_ROOMS_EXCEPTION = 100;
+  var GUEST_COUNT_EXCEPTION = 0;
   var GUEST_ROOMS_EXCEPTION_ERROR_MESSAGE = 'Помещение не рассчитано для гостей, можно выбрать только "не для гостей"';
 
   var SETTING = {
@@ -134,7 +135,7 @@
   function validateGuestsCount() {
     var errorMessage = '';
 
-    if (Number(roomsCount.value) === GUEST_ROOMS_EXCEPTION) {
+    if (Number(roomsCount.value) === GUEST_ROOMS_EXCEPTION && Number(guestsCount.value) !== GUEST_COUNT_EXCEPTION) {
       errorMessage = GUEST_ROOMS_EXCEPTION_ERROR_MESSAGE;
     } else if (Number(roomsCount.value) < Number(guestsCount.value)) {
       errorMessage = 'Можно выбрать ' + roomsCount.value + ' и менее гостей';

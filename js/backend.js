@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var TIMEOUT_IN_MS = 10000;
+
   var URL = {
     GET: 'https://javascript.pages.academy/keksobooking/data',
     POST: 'https://javascript.pages.academy/keksobooking',
@@ -9,8 +11,6 @@
   var StatusCode = {
     OK: 200
   };
-
-  var TIMEOUT_IN_MS = 10000;
 
   function createXHR(onLoad, onError) {
     var xhr = new XMLHttpRequest();

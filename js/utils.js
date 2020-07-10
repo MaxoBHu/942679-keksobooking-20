@@ -1,12 +1,12 @@
 'use strict';
 (function () {
+  var MOUSE_LEFT_BUTTON = 0;
+
   var EventKeyCode = {
     ENTER: 'Enter',
     NUMPAD_ENTER: 'NumpadEnter',
     ESCAPE: 'Escape',
   };
-
-  var MOUSE_LEFT_BUTTON = 0;
 
   var PinSize = {
     WIDTH: 50,
