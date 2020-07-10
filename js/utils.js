@@ -13,6 +13,13 @@
     BEFORE_END: 'beforeend',
   };
 
+  var PinSize = {
+    WIDTH: 50,
+    HEIGHT: 70,
+    MAIN_WIDTH: 65,
+    MAIN_HEIGHT: 82,
+  };
+
   function isEnterEvent(evt) {
     return evt.key === EventKeyCode.ENTER;
   }
@@ -79,18 +86,6 @@
     return newElement.firstChild;
   }
 
-  function setCoordX(x) {
-    var minX = window.constants.MAP_MIN_X;
-    var maxX = window.constants.MAP_MAX_X - window.constants.MAIN_PIN_WIDTH;
-    return Math.max(Math.min(x, maxX), minX);
-  }
-
-  function setCoordY(y) {
-    var minY = window.constants.MAP_MIN_Y;
-    var maxY = window.constants.MAP_MAX_Y;
-    return Math.max(Math.min(y, maxY), minY);
-  }
-
   function getRandomInt(min, max) {
     return min + Math.floor(Math.random() * (max - min));
   }
@@ -111,8 +106,8 @@
   function convertCoordsToAddress(coords) {
     return (
       {
-        x: coords.x + Math.floor(window.constants.MAIN_PIN_WIDTH / 2),
-        y: coords.y + window.constants.MAIN_PIN_HEIGHT,
+        x: coords.x + Math.floor(PinSize.MAIN_WIDTH / 2),
+        y: coords.y + PinSize.MAIN_HEIGHT,
       }
     );
   }
@@ -120,8 +115,8 @@
   function convertAddressToCoords(coords) {
     return (
       {
-        x: coords.x - Math.floor(window.constants.PIN_WIDTH / 2),
-        y: coords.y - window.constants.PIN_HEIGHT,
+        x: coords.x - Math.floor(PinSize.WIDTH / 2),
+        y: coords.y - PinSize.HEIGHT,
       }
     );
   }
@@ -137,8 +132,6 @@
     render: render,
     remove: remove,
     createElement: createElement,
-    setCoordX: setCoordX,
-    setCoordY: setCoordY,
     getRandomInt: getRandomInt,
     getRandomArrValue: getRandomArrValue,
     getRandomArr: getRandomArr,
