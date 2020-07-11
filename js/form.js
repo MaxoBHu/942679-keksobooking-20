@@ -1,9 +1,8 @@
 'use strict';
 
 (function () {
-  var GUEST_ROOMS_EXCEPTION = 100;
-  var GUEST_COUNT_EXCEPTION = 0;
-  var GUEST_ROOMS_EXCEPTION_ERROR_MESSAGE = 'Помещение не рассчитано для гостей, можно выбрать только "не для гостей"';
+  var DEFAULT_ERROR_MESSAGE = 'Не верно заполнено поле';
+  var DEFAULT_FIELD_VALUE = '';
 
   var SETTING = {
     form: {
@@ -42,6 +41,20 @@
     palace: 10000,
   };
 
+  var roomsToGuests = {
+    '1': ['1'],
+    '2': ['1', '2'],
+    '3': ['1', '2', '3'],
+    '100': ['0'],
+  };
+
+  var roomCountToErrorMessage = {
+    '1': 'Только для 1го гостя',
+    '2': 'Для 2х или 1го гостя',
+    '3': 'Для 3х, 2х или 1го гостя',
+    '100': 'Не для гостей',
+  };
+
   var form = document.querySelector('.ad-form');
   var fields = form.querySelectorAll('.ad-form__element');
   var inputFields = form.querySelectorAll('input[type="text"], input[type="number"], input[type="file"], textarea');
@@ -60,7 +73,7 @@
 
   function resetFields() {
     inputFields.forEach(function (field) {
-      field.value = '';
+      field.value = DEFAULT_FIELD_VALUE;
     });
 
     checkboxFields.forEach(function (field) {
@@ -133,12 +146,12 @@
   }
 
   function validateGuestsCount() {
+    var validGuestsOptions = roomsToGuests[roomsCount.value];
     var errorMessage = '';
 
-    if (Number(roomsCount.value) === GUEST_ROOMS_EXCEPTION && Number(guestsCount.value) !== GUEST_COUNT_EXCEPTION) {
-      errorMessage = GUEST_ROOMS_EXCEPTION_ERROR_MESSAGE;
-    } else if (Number(roomsCount.value) < Number(guestsCount.value)) {
-      errorMessage = 'Можно выбрать ' + roomsCount.value + ' и менее гостей';
+    if (validGuestsOptions.indexOf(guestsCount.value) === -1) {
+      errorMessage = roomCountToErrorMessage[roomsCount.value]
+          || DEFAULT_ERROR_MESSAGE;
     }
 
     guestsCount.setCustomValidity(errorMessage);
